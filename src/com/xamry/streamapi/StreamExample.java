@@ -46,8 +46,8 @@ public class StreamExample {
 		
 		///////////////////Stream Operations/////////////////////////////////
 		//https://stackify.com/streams-guide-java-8/
-		//(i) Intermediate operations(map, filter, sorted etc)  (ii) Terminal operations (forEach, collect, reduce etc)
-		
+		//Method Types : (i) Intermediate operations(map, filter, sorted etc)  (ii) Terminal operations (forEach, collect, reduce etc)
+		//Stream Pipeline = Stream source + Intermediate operation + Terminal operation
 		
 		//1. forEach  (double the salary of each employee)  [Terminal operation, Stream can't be used further]
 		employeeList.forEach(e -> e.setSalary(e.getSalary() * 2));
@@ -73,6 +73,9 @@ public class StreamExample {
 		//6. toArray
 		Employee[] employeeArr = employeeList.stream().toArray(Employee[]::new);
 		System.out.println("toArray::\n" + Arrays.asList(employeeArr));
+		
+
+		
 		
 	}
 

@@ -1,7 +1,9 @@
 package com.xamry.streamapi;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
@@ -12,20 +14,24 @@ public class StreamExample {
 		/////////////////Stream Creation////////////////////////
 		
 		// 1. Empty Stream
-		Stream<String> streamEmpty = Stream.empty();
+		Stream<Employee> streamEmpty = Stream.empty();
 		
 		//2. Stream of Collection by calling stream() method of collection interface
-		Collection myCollection = Arrays.asList("a", "b", "c");
-		Stream<String> streamOfCollection = myCollection.stream();
+		List<Employee> employeeList = new ArrayList<>();
+		Employee emp1 = new Employee(1, "John Smith", 1000.0); employeeList.add(emp1);
+		Employee emp2 = new Employee(2, "David Parker", 2000.0); employeeList.add(emp2);
+		Employee emp3 = new Employee(3, "Angela Merkel", 3000.0); employeeList.add(emp3);
 		
-		//3. Stream of array by calling of() method of Stream 
-		Stream<String> streamOfArray = Stream.of("a", "b", "c");
+		Stream<Employee> byStreamMethod = employeeList.stream();
+		
+		//3. Stream of List by calling of() method of Stream 
+		Stream<Employee> byOfMethod = Stream.of(emp1, emp2, emp3);
 		
 		//4. Create stream using Stream.builder() method
-		Stream<String> streamBuilder = Stream.<String>builder().add("a").add("b").add("c").build();
+		Stream<Employee> byStreamBuilder = Stream.<Employee>builder().add(emp1).add(emp2).add(emp3).build();
 		
 		//5. Create Stream using Stream.generate() method. Limit result otherwise an infinite stream will be generated
-		Stream<String> streamGenerated = Stream.generate(() -> "John").limit(10);
+		Stream<Employee> streamGenerated = Stream.generate(() -> emp1).limit(10);
 		
 		//6. Create an infinite stream from Stream.iterate() method
 		Stream<Integer> streamIterated = Stream.iterate(40, n -> n + 2);
@@ -37,6 +43,36 @@ public class StreamExample {
 		
 		//////////////////////Referencing a Stream/////////////////////////
 		
+		
+		///////////////////Stream Operations/////////////////////////////////
+		//https://stackify.com/streams-guide-java-8/
+		//(i) Intermediate operations(map, filter, sorted etc)  (ii) Terminal operations (forEach, collect, reduce etc)
+		
+		
+		//1. forEach  (double the salary of each employee)  [Terminal operation, Stream can't be used further]
+		employeeList.forEach(e -> e.setSalary(e.getSalary() * 2));
+		System.out.println("ForEach::\n" + employeeList);
+		
+		
+		//2. map (Intermediate operation, returns a new stream)
+		List<Employee> empListRefined = employeeList.stream().map(e -> {e.setName("Mr./Ms." + e.getName());return e;}).collect(Collectors.toList());
+		System.out.println("Map and collect::\n" + empListRefined);
+		
+		//3. Collect (Terminal operation) - for collecting the elements in a collection
+		//Code as above
+		
+		
+		//4. filter (Intermediate operation)
+		List<Employee> employeesAfterFilter = employeeList.stream().filter(e -> e.getSalary() > 4000).collect(Collectors.toList());
+		System.out.println("Filter::\n" + employeesAfterFilter);
+		
+		//5. findFirst
+		Employee firstEmployee = employeeList.stream().filter(e -> e.getSalary() > 2000).findFirst().orElse(null);
+		System.out.println("FindFirst::\n" + firstEmployee);
+		
+		//6. toArray
+		Employee[] employeeArr = employeeList.stream().toArray(Employee[]::new);
+		System.out.println("toArray::\n" + Arrays.asList(employeeArr));
 		
 	}
 
